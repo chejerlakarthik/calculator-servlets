@@ -31,8 +31,8 @@ public class LoginServlet extends HttpServlet {
 		
 		if (validUser) {
 			User user = loginService.getUserDetails(username);
-			request.getSession().setAttribute("user", user);
-			response.sendRedirect("welcome.jsp");
+			request.setAttribute("user", user);
+			request.getRequestDispatcher("welcome.jsp").forward(request,response);
 		}
 		else {
 			response.sendRedirect("login.jsp");

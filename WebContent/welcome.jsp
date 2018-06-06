@@ -8,7 +8,7 @@
 </head>
 <body>
 
-Welcome <%= ((User)session.getAttribute("user")).getFullName() %>, you are now authenticated !!
+Welcome <%= ((User)request.getAttribute("user")).getFullName() %>, you are now authenticated !!
 
 </body>
 </html>

@@ -26,7 +26,7 @@ public class LoginServiceImpl implements LoginService {
 	public User getUserDetails(String userName) {
 		User user = new User();
 		user.setUserName(userName);
-		user.setFullName(users.get(userName));
+		user.setFullName(users.get(userName.toLowerCase()));
 		return user;
 	}
 
