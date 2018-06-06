@@ -3,6 +3,7 @@ package com.karthik.servlets;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,7 +13,8 @@ import javax.servlet.http.HttpSession;
 /**
  * Servlet implementation class ArithmeticServlet
  */
-@WebServlet("/ArithmeticServlet")
+@WebServlet(urlPatterns="/ArithmeticServlet", initParams = {@WebInitParam(name="operand1", value="100"),
+														   @WebInitParam(name="operand2", value="50")})
 public class ArithmeticServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -47,11 +49,17 @@ public class ArithmeticServlet extends HttpServlet {
 		
 		response.setContentType("text/plain");
 		
-		Double operand1 = Double.valueOf(request.getParameter("operand1"));
-		Double operand2 = Double.valueOf(request.getParameter("operand2"));
+		Double out = 0.0, operand1=0.0, operand2=0.0;
+		String error = "", additionalInfo="";
 		
-		Double out = 0.0;
-		String error = "";
+		if (request.getParameter("operand1").isEmpty() || request.getParameter("operand2").isEmpty()) {
+			operand1 = Double.valueOf(getServletConfig().getInitParameter("operand1"));
+			operand2 = Double.valueOf(getServletConfig().getInitParameter("operand2"));
+			additionalInfo ="Received invalid operand values, Using default values 100 and 50";
+		}else {
+			operand1 = Double.valueOf(request.getParameter("operand1"));
+			operand2 = Double.valueOf(request.getParameter("operand2"));
+		}
 		
 		if("ADD".equalsIgnoreCase(request.getParameter("operation"))) {
 			out = operand1 + operand2;
@@ -71,6 +79,7 @@ public class ArithmeticServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		session.setAttribute("result", out);
 		session.setAttribute("error", error);
+		session.setAttribute("additionalInfo", additionalInfo);
 		
 		request.getRequestDispatcher("/ArithmeticResult.jsp").forward(request, response);
 		
