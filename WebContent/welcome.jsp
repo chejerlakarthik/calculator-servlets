@@ -8,7 +8,9 @@
 </head>
 <body>
 
-Welcome <%= ((User)request.getAttribute("user")).getFullName() %>, you are now authenticated !!
+<jsp:useBean id="user" class="com.karthik.model.User" scope="request"/>
+
+Welcome <jsp:getProperty property="fullName" name="user"/>, you are now authenticated !!
 
 </body>
 </html>
