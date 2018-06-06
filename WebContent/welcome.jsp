@@ -4,13 +4,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Refresh" content="${delay};url=${nextPage}">
 <title>Welcome</title>
 </head>
 <body>
 
 <jsp:useBean id="user" class="com.karthik.model.User" scope="request"/>
 
-Welcome <jsp:getProperty property="fullName" name="user"/>, you are now authenticated !!
+Welcome <jsp:getProperty property="fullName" name="user"/>, you are now authenticated !! <br> <br>
+
+Redirecting to ${nextPage} in ${delay} seconds...
 
 </body>
 </html>

@@ -28,8 +28,9 @@ String additionalInfo = (String) session.getAttribute("additionalInfo");
 	Result is : <%= result %>
 <% } %>
 
-
-<a href="login.jsp">Logout</a>
+<form action="${pageContext.request.contextPath}/logout" method="post">
+    <input type="submit" value="Logout" />
+</form>
 
 </body>
 </html>

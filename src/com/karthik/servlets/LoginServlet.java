@@ -32,6 +32,9 @@ public class LoginServlet extends HttpServlet {
 		if (validUser) {
 			User user = loginService.getUserDetails(username);
 			request.setAttribute("user", user);
+			request.getSession().setAttribute("user", user);
+			request.setAttribute("nextPage", "ArithmeticInput.html");
+			request.setAttribute("delay", 5);
 			request.getRequestDispatcher("welcome.jsp").forward(request,response);
 		}
 		else {
