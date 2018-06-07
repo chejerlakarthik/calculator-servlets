@@ -10,10 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.karthik.model.ArithmeticResult;
+
 /**
  * Servlet implementation class ArithmeticServlet
  */
-@WebServlet(urlPatterns="/ArithmeticServlet", initParams = {@WebInitParam(name="operand1", value="100"),
+@WebServlet(urlPatterns="/app/ArithmeticServlet", initParams = {@WebInitParam(name="operand1", value="100"),
 														   @WebInitParam(name="operand2", value="50")})
 public class ArithmeticServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -36,7 +38,7 @@ public class ArithmeticServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		request.getRequestDispatcher("/ArithmeticInput.html").forward(request, response);
+		request.getRequestDispatcher("/input.jsp").forward(request, response);
 		
 	}
 
@@ -49,16 +51,29 @@ public class ArithmeticServlet extends HttpServlet {
 		
 		response.setContentType("text/plain");
 		
-		Double out = 0.0, operand1=0.0, operand2=0.0;
-		String error = "", additionalInfo="";
+		Double out = 0.0, operand1 = 0.0, operand2 = 0.0;
+		String error = "", additionalInfo = "";
+		
+		HttpSession session = request.getSession();
+		ArithmeticResult result = new ArithmeticResult();
 		
 		if (request.getParameter("operand1").isEmpty() || request.getParameter("operand2").isEmpty()) {
 			operand1 = Double.valueOf(getServletConfig().getInitParameter("operand1"));
 			operand2 = Double.valueOf(getServletConfig().getInitParameter("operand2"));
 			additionalInfo ="Received invalid operand values, Using default values 100 and 50";
+			result.setAdditionalInfo(additionalInfo);
 		}else {
-			operand1 = Double.valueOf(request.getParameter("operand1"));
-			operand2 = Double.valueOf(request.getParameter("operand2"));
+			try {
+				operand1 = Double.valueOf(request.getParameter("operand1"));
+				operand2 = Double.valueOf(request.getParameter("operand2"));
+			} catch (NumberFormatException ex) {
+				System.err.println("Exception occurred: " + ex.getMessage());
+				error = "Invalid operand(s) specified !!";
+				result.setError(error);
+				request.getSession().setAttribute("result", result);
+				request.getRequestDispatcher("/result.jsp").forward(request, response);
+				return;
+			}
 		}
 		
 		if("ADD".equalsIgnoreCase(request.getParameter("operation"))) {
@@ -74,14 +89,13 @@ public class ArithmeticServlet extends HttpServlet {
 				out = operand1/operand2;
 		}else {
 			error = "Invalid Operation";
+			session.setAttribute("error", error);
 		}
 		
-		HttpSession session = request.getSession();
-		session.setAttribute("result", out);
-		session.setAttribute("error", error);
-		session.setAttribute("additionalInfo", additionalInfo);
+		result.setResult(out);
 		
-		request.getRequestDispatcher("/ArithmeticResult.jsp").forward(request, response);
+		request.getSession().setAttribute("result", result);
+		request.getRequestDispatcher("/result.jsp").forward(request, response);
 		
 	}
 

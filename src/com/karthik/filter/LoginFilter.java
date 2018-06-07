@@ -1,3 +1,4 @@
+
 package com.karthik.filter;
 
 import java.io.IOException;
@@ -11,7 +12,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebFilter(urlPatterns="/*")
+@WebFilter(urlPatterns="/app/*")
 public class LoginFilter implements Filter {
 
 	@Override
@@ -20,10 +21,10 @@ public class LoginFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
 		
-		System.out.println(req.getRequestURI());
+		System.out.println("Filter called for URI: " + req.getRequestURI());
 		
 		if (!req.getRequestURI().contains("/login") && (req.getSession().getAttribute("user") == null)) {
-			res.sendRedirect("login.jsp");
+			res.sendRedirect(req.getServletContext().getContextPath() + "/login.jsp");
 		} else {
 			chain.doFilter(request, response);
 		}
