@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="Refresh" content="${delay};url=${nextPage}">
+<%-- <meta http-equiv="Refresh" content="${delay};url=${nextPage}"> --%>
 <title>Welcome</title>
 </head>
 <body>
@@ -12,6 +12,8 @@
 <jsp:useBean id="user" class="com.karthik.model.User" scope="request"/>
 
 Welcome <jsp:getProperty property="fullName" name="user"/>, you are now authenticated !! <br> <br>
+
+Click link to navigate to <a href='<%=response.encodeURL("app/ArithmeticServlet")%>'>Calculator App</a>.
 
 Redirecting to ${nextPage} in ${delay} seconds...
 
